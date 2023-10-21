@@ -1,4 +1,4 @@
-package com.example.myapplication.Activity
+package com.example.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,7 +14,6 @@ import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.Account.Account
 import com.example.myapplication.AccountDao.AccountDao
 import com.example.myapplication.Adapter.AccountAdapter
-import com.example.myapplication.R
 
 class MainActivity : AppCompatActivity() {
     lateinit var et_name: EditText
