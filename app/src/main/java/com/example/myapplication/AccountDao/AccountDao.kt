@@ -9,8 +9,8 @@ import com.example.myapplication.Account.Account
 import com.example.myapplication.Util.DBhelper
 
 class AccountDao(var context: Context) {
-    private lateinit var dBhelper: DBhelper
-    lateinit var accountlist:MutableList<Account>
+    var dBhelper: DBhelper
+    var accountlist:MutableList<Account>
     init {
         dBhelper = DBhelper(context)
         accountlist = mutableListOf()

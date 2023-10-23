@@ -11,15 +11,23 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.myapplication.Account.Account
 import com.example.myapplication.AccountDao.AccountDao
+import com.example.myapplication.AccountService.AccounService
 import com.example.myapplication.R
 import java.lang.String
 
-class AccountAdapter(var context: Context,var accoutlist:MutableList<Account>) :BaseAdapter(){
+class AccountAdapter(var context: Context,var accoutlist:MutableList<Account>,var handle:Handle) :BaseAdapter(){
     private var accountList: MutableList<Account>
     private var dao: AccountDao
+    private var accounService:AccounService
     init {
         this.accountList = accoutlist
         this.dao = AccountDao(context)
+        this.accounService = AccounService(context)
+    }
+    interface Handle{
+        fun raiseAccount(index:Int)
+        fun downAccount(index:Int)
+        fun deleteAccount(index:Int)
     }
 
     override fun getCount(): Int {
@@ -56,31 +64,13 @@ class AccountAdapter(var context: Context,var accoutlist:MutableList<Account>) :
         holder.priceTextView.text = String.valueOf(account.price)
 //        设置ImageView的点击事件监听器
         holder.upImageView.setOnClickListener {
-            account.price = account.price + 1// 数字加1
-            dao.update(account)
-            notifyDataSetChanged()
-            Toast.makeText(context, "+1", Toast.LENGTH_SHORT).show()
+            handle.raiseAccount(position)
         }
         holder.downImageView.setOnClickListener {
-            account.price = account.price - 1 // 数字减1
-            dao.update(account)
-            notifyDataSetChanged()
-            Toast.makeText(context, "-1", Toast.LENGTH_SHORT).show()
+           handle.downAccount(position)
         }
-        holder.delImageView.setOnClickListener { deleted(account) }
+        holder.delImageView.setOnClickListener { handle.deleteAccount(position) }
         return view!!
-    }
-    fun deleted(account: Account) {
-        var dialog: AlertDialog.Builder = AlertDialog.Builder(context).setTitle("确认删除").setMessage("确定要删除该产品吗？")
-        dialog.setPositiveButton("确定") { dialogInterface, i ->
-            if (dao.delete(account) > 0) {
-                Toast.makeText(context, "del", Toast.LENGTH_SHORT).show()
-                accountList.remove(account)
-                notifyDataSetChanged()
-            }
-            dialog.setNegativeButton("取消") { dialogInterface, i -> }
-            dialog.show()
-        }
     }
     private  class ViewHolder {
         lateinit var idTextView: TextView
